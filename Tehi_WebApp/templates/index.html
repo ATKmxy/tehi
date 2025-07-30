@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>תֶּהִי | שיחה</title>
+</head>
+<body>
+  <h1>שוחח עם תֶּהִי</h1>
+  <textarea id="chat" cols="80" rows="20" readonly></textarea><br>
+  <input id="input" type="text" size="80" placeholder="כתוב כאן..." />
+  <button onclick="send()">שלח</button>
+  <script>
+    async function send() {
+      const input = document.getElementById('input');
+      const chat = document.getElementById('chat');
+      const message = input.value;
+      input.value = '';
+      chat.value += "\nאתה: " + message;
+      const res = await fetch('/message', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message})
+      });
+      const data = await res.json();
+      chat.value += "\n" + data.response;
+    }
+  </script>
+</body>
+</html>
